@@ -1,9 +1,22 @@
 import type { CaptureSession } from "../domain/models";
 
+function escapeHtml(input: unknown): string {
+  return String(input ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 export function buildSessionPdfHtml(s: CaptureSession): string {
-  const tr = (k: string, v: string) => `<tr><td style="padding:6px;border:1px solid #ddd">${k}</td><td style="padding:6px;border:1px solid #ddd">${v}</td></tr>`;
+  const tr = (k: string, v: string) =>
+    `<tr><td style="padding:6px;border:1px solid #ddd">${escapeHtml(k)}</td><td style="padding:6px;border:1px solid #ddd">${escapeHtml(v)}</td></tr>`;
   const tolRows = s.toleranceResults
-    .map((r) => `<tr><td style="padding:6px;border:1px solid #ddd">${r.check}</td><td style="padding:6px;border:1px solid #ddd">${r.status}</td><td style="padding:6px;border:1px solid #ddd">${r.valueMm}</td><td style="padding:6px;border:1px solid #ddd">${r.limitMm}</td></tr>`)
+    .map(
+      (r) =>
+        `<tr><td style="padding:6px;border:1px solid #ddd">${escapeHtml(r.check)}</td><td style="padding:6px;border:1px solid #ddd">${escapeHtml(r.status)}</td><td style="padding:6px;border:1px solid #ddd">${escapeHtml(r.valueMm)}</td><td style="padding:6px;border:1px solid #ddd">${escapeHtml(r.limitMm)}</td></tr>`
+    )
     .join("");
 
   return `<!doctype html>
@@ -15,7 +28,7 @@ export function buildSessionPdfHtml(s: CaptureSession): string {
 </head>
 <body style="font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial; padding: 24px;">
   <h1 style="margin:0 0 8px;">Opening Capture Report</h1>
-  <div style="color:#444;margin-bottom:16px;">Session: <b>${s.sessionId}</b> · Opening: <b>${s.openingId}</b></div>
+  <div style="color:#444;margin-bottom:16px;">Session: <b>${escapeHtml(s.sessionId)}</b> · Opening: <b>${escapeHtml(s.openingId)}</b></div>
 
   <h2 style="margin:24px 0 8px;">Summary</h2>
   <table style="border-collapse:collapse; width:100%; max-width:720px;">

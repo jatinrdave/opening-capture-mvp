@@ -7,9 +7,21 @@ import { buildSessionPdfHtml } from "./pdfExport";
 
 export type ExportPaths = { pdfPath: string; jsonPath: string; csvPath: string };
 
+async function ensureDir(dir: string): Promise<void> {
+  const info = await FileSystem.getInfoAsync(dir);
+  if (!info.exists) {
+    await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
+  }
+}
+
 export async function writeSessionExports(s: CaptureSession): Promise<ExportPaths> {
-  const dir = `${FileSystem.documentDirectory}exports/${s.sessionId}`;
-  await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
+  const base = FileSystem.documentDirectory;
+  if (!base) {
+    throw new Error("FileSystem.documentDirectory is unavailable on this platform.");
+  }
+
+  const dir = `${base}exports/${s.sessionId}`;
+  await ensureDir(dir);
 
   const jsonPath = `${dir}/session.json`;
   const csvPath = `${dir}/session.csv`;
