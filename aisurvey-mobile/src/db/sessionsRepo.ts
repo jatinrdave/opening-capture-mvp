@@ -32,3 +32,40 @@ export async function listSessions(openingId: string): Promise<{ sessionId: stri
   );
 }
 
+export async function getSessionById(sessionId: string): Promise<CaptureSession | null> {
+  const db = await getDb();
+  const row = await db.getFirstAsync<{
+    sessionId: string;
+    openingId: string;
+    createdAt: string;
+    syncState: CaptureSession["syncState"];
+    requiredPhotosJson: string;
+    measurementsJson: string;
+    toleranceConfigJson: string;
+    toleranceResultsJson: string;
+    overallStatus: CaptureSession["overallStatus"];
+  }>(
+    `SELECT
+      sessionId, openingId, createdAt, syncState,
+      requiredPhotosJson, measurementsJson,
+      toleranceConfigJson, toleranceResultsJson,
+      overallStatus
+     FROM sessions WHERE sessionId = ?`,
+    [sessionId]
+  );
+
+  if (!row) return null;
+
+  return {
+    sessionId: row.sessionId,
+    openingId: row.openingId,
+    createdAt: row.createdAt,
+    syncState: row.syncState,
+    requiredPhotos: JSON.parse(row.requiredPhotosJson),
+    measurements: JSON.parse(row.measurementsJson),
+    toleranceConfigSnapshot: JSON.parse(row.toleranceConfigJson),
+    toleranceResults: JSON.parse(row.toleranceResultsJson),
+    overallStatus: row.overallStatus,
+  };
+}
+
