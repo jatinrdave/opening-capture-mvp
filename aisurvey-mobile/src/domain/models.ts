@@ -29,7 +29,7 @@ export type ToleranceConfig = {
 
 export type ToleranceResult = {
   check: "outOfSquare" | "widthRange" | "heightRange";
-  status: "PASS" | "WARN" | "FAIL";
+  status: "PASS" | "FAIL";
   valueMm: number;
   limitMm: number;
 };
@@ -49,6 +49,6 @@ export type CaptureSession = {
   measurements: MeasurementSet;
   toleranceConfigSnapshot: ToleranceConfig;
   toleranceResults: ToleranceResult[];
-  overallStatus: "PASS" | "WARN" | "FAIL";
+  overallStatus: "PASS" | "FAIL";
   syncState: "local_only" | "queued" | "synced" | "error";
 };
