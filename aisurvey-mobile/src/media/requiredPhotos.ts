@@ -1,12 +1,6 @@
 import type { RequiredPhotoKind } from "../domain/models";
 
-export const requiredPhotoKinds: RequiredPhotoKind[] = [
-  "overview",
-  "leftJamb",
-  "rightJamb",
-  "head",
-  "sill",
-];
+export const requiredPhotoKinds: RequiredPhotoKind[] = ["overview", "leftJamb", "rightJamb", "head", "sill"];
 
 export const requiredPhotoLabels: Record<RequiredPhotoKind, string> = {
   overview: "Full opening (overview)",

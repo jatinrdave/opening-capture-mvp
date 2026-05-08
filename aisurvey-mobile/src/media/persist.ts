@@ -7,11 +7,7 @@ export async function ensureDir(dirUri: string): Promise<void> {
   }
 }
 
-export async function copyIntoAppStorage(
-  fromUri: string,
-  toDir: string,
-  filename: string,
-): Promise<string> {
+export async function copyIntoAppStorage(fromUri: string, toDir: string, filename: string): Promise<string> {
   await ensureDir(toDir);
   const toUri = `${toDir}/${filename}`;
   await FileSystem.copyAsync({ from: fromUri, to: toUri });
