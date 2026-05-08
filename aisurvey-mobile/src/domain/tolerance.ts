@@ -1,6 +1,6 @@
 import type { MeasurementSet, ToleranceConfig, ToleranceResult } from "./models";
 
-function statusFor(value: number, limit: number): "PASS" | "FAIL" {
+export function statusFor(value: number, limit: number): "PASS" | "FAIL" {
   return value <= limit ? "PASS" : "FAIL";
 }
 
