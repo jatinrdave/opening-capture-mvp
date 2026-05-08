@@ -1,18 +1,18 @@
 import { z } from "zod";
-import type { CaptureSessionDraft, RequiredPhotoKind } from "./models";
+import { REQUIRED_PHOTO_KINDS, type CaptureSessionDraft } from "./models";
 
-const requiredPhotoKinds: RequiredPhotoKind[] = ["overview", "leftJamb", "rightJamb", "head", "sill"];
+const positiveFiniteNumber = () => z.number().finite().gt(0);
 
 const RequiredPhotosSchema = z
   .object({
-    overview: z.string().nullable(),
-    leftJamb: z.string().nullable(),
-    rightJamb: z.string().nullable(),
-    head: z.string().nullable(),
-    sill: z.string().nullable(),
+    overview: z.string().trim().min(1).nullable(),
+    leftJamb: z.string().trim().min(1).nullable(),
+    rightJamb: z.string().trim().min(1).nullable(),
+    head: z.string().trim().min(1).nullable(),
+    sill: z.string().trim().min(1).nullable(),
   })
   .superRefine((val, ctx) => {
-    for (const k of requiredPhotoKinds) {
+    for (const k of REQUIRED_PHOTO_KINDS) {
       if (!val[k]) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -24,20 +24,20 @@ const RequiredPhotosSchema = z
   });
 
 const MeasurementSetSchema = z.object({
-  widthTop: z.number().positive(),
-  widthMid: z.number().positive(),
-  widthBottom: z.number().positive(),
-  heightLeft: z.number().positive(),
-  heightCenter: z.number().positive(),
-  heightRight: z.number().positive(),
-  depthLeft: z.number().positive().nullable().optional(),
-  depthRight: z.number().positive().nullable().optional(),
+  widthTop: positiveFiniteNumber(),
+  widthMid: positiveFiniteNumber(),
+  widthBottom: positiveFiniteNumber(),
+  heightLeft: positiveFiniteNumber(),
+  heightCenter: positiveFiniteNumber(),
+  heightRight: positiveFiniteNumber(),
+  depthLeft: positiveFiniteNumber().nullable().optional(),
+  depthRight: positiveFiniteNumber().nullable().optional(),
 });
 
 const ToleranceConfigSchema = z.object({
-  maxOutOfSquareMm: z.number().positive(),
-  maxWidthRangeMm: z.number().positive(),
-  maxHeightRangeMm: z.number().positive(),
+  maxOutOfSquareMm: positiveFiniteNumber(),
+  maxWidthRangeMm: positiveFiniteNumber(),
+  maxHeightRangeMm: positiveFiniteNumber(),
 });
 
 const CaptureSessionDraftSchema = z.object({

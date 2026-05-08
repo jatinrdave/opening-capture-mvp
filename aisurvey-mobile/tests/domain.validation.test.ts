@@ -28,6 +28,18 @@ describe("capture session validation", () => {
     });
 
     expect(result.success).toBe(false);
+    if (!result.success) {
+      const issuePaths = result.error.issues.map((i) => i.path.join("."));
+      expect(issuePaths).toEqual(expect.arrayContaining(["requiredPhotos.overview"]));
+      expect(issuePaths).toEqual(
+        expect.arrayContaining([
+          "requiredPhotos.leftJamb",
+          "requiredPhotos.rightJamb",
+          "requiredPhotos.head",
+          "requiredPhotos.sill",
+        ])
+      );
+    }
   });
 
   it("accepts when required photos and required measurements exist", () => {

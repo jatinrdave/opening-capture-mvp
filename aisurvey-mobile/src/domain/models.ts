@@ -1,5 +1,13 @@
 export type RequiredPhotoKind = "overview" | "leftJamb" | "rightJamb" | "head" | "sill";
 
+export const REQUIRED_PHOTO_KINDS = [
+  "overview",
+  "leftJamb",
+  "rightJamb",
+  "head",
+  "sill",
+] as const satisfies readonly RequiredPhotoKind[];
+
 export type RequiredPhotos = Record<RequiredPhotoKind, string | null>;
 
 export type MeasurementSet = {
