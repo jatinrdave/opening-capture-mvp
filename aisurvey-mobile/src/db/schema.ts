@@ -1,4 +1,5 @@
 export const schemaSql = `
+PRAGMA foreign_keys = ON;
 PRAGMA journal_mode = WAL;
 
 CREATE TABLE IF NOT EXISTS projects (
@@ -27,4 +28,7 @@ CREATE TABLE IF NOT EXISTS sessions (
   overallStatus TEXT NOT NULL,
   FOREIGN KEY(openingId) REFERENCES openings(openingId)
 );
+
+CREATE INDEX IF NOT EXISTS idx_openings_projectId_createdAt ON openings(projectId, createdAt DESC);
+CREATE INDEX IF NOT EXISTS idx_sessions_openingId_createdAt ON sessions(openingId, createdAt DESC);
 `;
