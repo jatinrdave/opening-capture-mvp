@@ -54,6 +54,7 @@ function RootLayoutNav() {
         <Stack.Screen name="projects/index" options={{ title: "Projects" }} />
         <Stack.Screen name="projects/[projectId]/openings" options={{ title: "Openings" }} />
         <Stack.Screen name="openings/[openingId]/capture" options={{ title: "Capture" }} />
+        <Stack.Screen name="openings/[openingId]/compare" options={{ title: "Compare scans" }} />
         <Stack.Screen name="sessions/[sessionId]/review" options={{ title: "Review" }} />
       </Stack>
     </ThemeProvider>

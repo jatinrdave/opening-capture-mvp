@@ -79,15 +79,23 @@ export default function OpeningsScreen() {
           scrollEnabled={false}
           ItemSeparatorComponent={() => <View style={styles.sep} />}
           renderItem={({ item }) => (
-            <Pressable
-              onPress={() => router.push(`/openings/${item.openingId}/capture`)}
-              style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}>
-              <View style={styles.rowLeft}>
-                <Text style={styles.rowTitle}>{item.label}</Text>
-                <Text style={styles.rowMeta}>{new Date(item.createdAt).toLocaleString()}</Text>
-              </View>
-              <Text style={styles.rowChevron}>›</Text>
-            </Pressable>
+            <View style={styles.row}>
+              <Pressable
+                onPress={() => router.push(`/openings/${item.openingId}/capture`)}
+                style={({ pressed }) => [styles.rowMain, pressed && styles.rowPressed]}>
+                <View style={styles.rowLeft}>
+                  <Text style={styles.rowTitle}>{item.label}</Text>
+                  <Text style={styles.rowMeta}>{new Date(item.createdAt).toLocaleString()}</Text>
+                </View>
+                <Text style={styles.rowChevron}>›</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => router.push(`/openings/${item.openingId}/compare`)}
+                style={({ pressed }) => [styles.compareLink, pressed && styles.compareLinkPressed]}
+                hitSlop={8}>
+                <Text style={styles.compareLinkText}>Compare</Text>
+              </Pressable>
+            </View>
           )}
           ListEmptyComponent={
             <View style={styles.empty}>
@@ -106,11 +114,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#F3F4F6",
   },
   row: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  rowMain: {
+    flex: 1,
     paddingVertical: 12,
     paddingHorizontal: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  compareLink: {
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    justifyContent: "center",
+  },
+  compareLinkPressed: {
+    opacity: 0.7,
+  },
+  compareLinkText: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#2563EB",
   },
   rowPressed: {
     backgroundColor: "#F9FAFB",
