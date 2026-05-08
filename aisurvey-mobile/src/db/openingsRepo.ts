@@ -17,3 +17,19 @@ export async function listOpenings(projectId: string): Promise<{ openingId: stri
   ]);
 }
 
+export async function getOpening(openingId: string): Promise<{
+  openingId: string;
+  projectId: string;
+  label: string;
+  createdAt: string;
+} | null> {
+  const db = await getDb();
+  const row = await db.getFirstAsync<{
+    openingId: string;
+    projectId: string;
+    label: string;
+    createdAt: string;
+  }>("SELECT openingId, projectId, label, createdAt FROM openings WHERE openingId = ?", [openingId]);
+  return row ?? null;
+}
+

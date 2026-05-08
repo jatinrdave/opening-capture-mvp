@@ -1,8 +1,10 @@
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 
+import { getOpening } from "@/src/db/openingsRepo";
+import { PROJECT_TOLERANCE_DEFAULTS, getProject } from "@/src/db/projectsRepo";
 import { insertSession } from "@/src/db/sessionsRepo";
 import { createCaptureSession } from "@/src/domain/sessionFactory";
 import { REQUIRED_PHOTO_KINDS, type RequiredPhotoKind, type RequiredPhotos } from "@/src/domain/models";
@@ -51,12 +53,38 @@ export default function CaptureScreen() {
     depthRight: "",
   });
   const [tolerance, setTolerance] = useState({
-    maxOutOfSquareMm: "3",
-    maxWidthRangeMm: "5",
-    maxHeightRangeMm: "5",
+    maxOutOfSquareMm: String(PROJECT_TOLERANCE_DEFAULTS.maxOutOfSquareMm),
+    maxWidthRangeMm: String(PROJECT_TOLERANCE_DEFAULTS.maxWidthRangeMm),
+    maxHeightRangeMm: String(PROJECT_TOLERANCE_DEFAULTS.maxHeightRangeMm),
   });
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (!openingId) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const opening = await getOpening(openingId);
+        if (!opening) {
+          Alert.alert("Not found", "Opening could not be loaded.");
+          return;
+        }
+        const project = await getProject(opening.projectId);
+        if (!project || cancelled) return;
+        setTolerance({
+          maxOutOfSquareMm: String(project.defaultMaxOutOfSquareMm),
+          maxWidthRangeMm: String(project.defaultMaxWidthRangeMm),
+          maxHeightRangeMm: String(project.defaultMaxHeightRangeMm),
+        });
+      } catch (e) {
+        Alert.alert("Error", e instanceof Error ? e.message : String(e));
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [openingId]);
 
   const missingPhotos = useMemo(() => {
     const missing: RequiredPhotoKind[] = [];
@@ -170,7 +198,9 @@ export default function CaptureScreen() {
         ))}
       </Section>
 
-      <Section title="Tolerance config" subtitle="Defaults are MVP-sensible; tune as needed.">
+      <Section
+        title="Tolerance config"
+        subtitle="Loaded from this opening's project defaults. Edit here to override for this session only.">
         <TextField
           label="Max out-of-square (mm)"
           value={tolerance.maxOutOfSquareMm}
