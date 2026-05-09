@@ -32,12 +32,15 @@ const MeasurementSetSchema = z.object({
   heightRight: positiveFiniteNumber(),
   depthLeft: positiveFiniteNumber().nullable().optional(),
   depthRight: positiveFiniteNumber().nullable().optional(),
+  notes: z.string().trim().min(1).nullable().optional(),
+  annotationRefs: z.array(z.string().trim().min(1)).optional(),
 });
 
 const ToleranceConfigSchema = z.object({
   maxOutOfSquareMm: positiveFiniteNumber(),
   maxWidthRangeMm: positiveFiniteNumber(),
   maxHeightRangeMm: positiveFiniteNumber(),
+  warnBandMultiplier: positiveFiniteNumber().gt(1),
 });
 
 const CaptureSessionDraftSchema = z.object({

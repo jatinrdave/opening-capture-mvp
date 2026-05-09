@@ -1,4 +1,4 @@
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 import * as Print from "expo-print";
 import type { CaptureSession } from "../domain/models";
 import { buildSessionCsv } from "./csvExport";
@@ -28,8 +28,9 @@ export async function writeSessionExports(s: CaptureSession): Promise<ExportPath
   await FileSystem.writeAsStringAsync(jsonPath, buildSessionJson(s), { encoding: FileSystem.EncodingType.UTF8 });
   await FileSystem.writeAsStringAsync(csvPath, buildSessionCsv(s), { encoding: FileSystem.EncodingType.UTF8 });
 
+  const html = await buildSessionPdfHtml(s);
   const { uri: pdfPath } = await Print.printToFileAsync({
-    html: buildSessionPdfHtml(s),
+    html,
     base64: false,
   });
 

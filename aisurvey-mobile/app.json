@@ -31,7 +31,22 @@
     },
     "plugins": [
       "expo-router",
-      "expo-sqlite"
+      "expo-sqlite",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "AISurvey uses the camera for capture-first opening photos.",
+          "microphonePermission": "AISurvey uses the microphone only when recording optional installation video.",
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "AISurvey uses your location to stamp capture sessions with GPS coordinates when permitted.",
+          "locationAlwaysAndWhenInUsePermission": "AISurvey uses your location to stamp capture sessions with GPS coordinates when permitted."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

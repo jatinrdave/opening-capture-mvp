@@ -49,13 +49,19 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerBackTitleVisible: false }}>
+      <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="projects/index" options={{ title: "Projects" }} />
         <Stack.Screen name="projects/[projectId]/openings" options={{ title: "Openings" }} />
+        <Stack.Screen name="projects/[projectId]/edit" options={{ title: "Edit project" }} />
+        <Stack.Screen name="openings/[openingId]/index" options={{ title: "Opening" }} />
+        <Stack.Screen name="openings/[openingId]/edit" options={{ title: "Edit opening" }} />
         <Stack.Screen name="openings/[openingId]/capture" options={{ title: "Capture" }} />
         <Stack.Screen name="openings/[openingId]/compare" options={{ title: "Compare scans" }} />
+        <Stack.Screen name="openings/[openingId]/tolerance" options={{ title: "Tolerance overrides" }} />
         <Stack.Screen name="sessions/[sessionId]/review" options={{ title: "Review" }} />
+        <Stack.Screen name="sync/index" options={{ title: "Sync queue" }} />
+        <Stack.Screen name="settings/operator" options={{ title: "Operator" }} />
       </Stack>
     </ThemeProvider>
   );

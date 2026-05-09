@@ -15,6 +15,19 @@ function formatMm(delta: number): string {
   return `${sign}${delta.toFixed(1)} mm`;
 }
 
+function statusStyle(code: string) {
+  switch (code) {
+    case "PASS":
+      return styles.statusPass;
+    case "WARN":
+      return styles.statusWarn;
+    case "FAIL":
+      return styles.statusFail;
+    default:
+      return styles.statusNeutral;
+  }
+}
+
 export default function CompareSessionsScreen() {
   const { openingId } = useLocalSearchParams<{ openingId: string }>();
 
@@ -143,9 +156,9 @@ export default function CompareSessionsScreen() {
               <Text style={styles.warn}>Select two different sessions.</Text>
             ) : (
               <>
-                <Text style={styles.statusBefore}>{sessionA.overallStatus}</Text>
+                <Text style={[styles.statusBefore, statusStyle(sessionA.overallStatus)]}>{sessionA.overallStatus}</Text>
                 <Text style={styles.arrow}> → </Text>
-                <Text style={styles.statusAfter}>{sessionB.overallStatus}</Text>
+                <Text style={[styles.statusAfter, statusStyle(sessionB.overallStatus)]}>{sessionB.overallStatus}</Text>
               </>
             )}
           </Text>
@@ -206,9 +219,13 @@ const styles = StyleSheet.create({
   empty: { paddingVertical: 12 },
   emptyText: { fontSize: 13, color: "#6B7280" },
   statusLine: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 4 },
-  statusBefore: { fontSize: 15, fontWeight: "700", color: "#374151" },
+  statusBefore: { fontSize: 15, fontWeight: "700" },
   arrow: { fontSize: 15, color: "#9CA3AF" },
-  statusAfter: { fontSize: 15, fontWeight: "700", color: "#111827" },
+  statusAfter: { fontSize: 15, fontWeight: "700" },
+  statusPass: { color: "#067647" },
+  statusWarn: { color: "#B45309" },
+  statusFail: { color: "#B42318" },
+  statusNeutral: { color: "#374151" },
   warn: { fontSize: 14, color: "#B45309", fontWeight: "600" },
   muted: { fontSize: 13, color: "#6B7280" },
   deltaGrid: { gap: 8 },
@@ -221,5 +238,5 @@ const styles = StyleSheet.create({
     borderBottomColor: "#E5E7EB",
   },
   deltaLabel: { fontSize: 14, color: "#374151" },
-  deltaValue: { fontSize: 14, fontWeight: "700", fontVariant: "tabular-nums", color: "#111827" },
+  deltaValue: { fontSize: 14, fontWeight: "700", fontVariant: ["tabular-nums"], color: "#111827" },
 });

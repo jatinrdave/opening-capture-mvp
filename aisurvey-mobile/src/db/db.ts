@@ -1,5 +1,5 @@
 import * as SQLite from "expo-sqlite";
-import { ensureProjectToleranceColumns } from "./migrations";
+import { runAllMigrations } from "./migrations";
 import { schemaSql } from "./schema";
 
 let db: SQLite.SQLiteDatabase | null = null;
@@ -11,7 +11,7 @@ export async function getDb(): Promise<SQLite.SQLiteDatabase> {
     dbPromise = (async () => {
       const opened = await SQLite.openDatabaseAsync("aisurvey.db");
       await opened.execAsync(schemaSql);
-      await ensureProjectToleranceColumns(opened);
+      await runAllMigrations(opened);
       db = opened;
       return opened;
     })();

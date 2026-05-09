@@ -24,6 +24,7 @@ describe("capture session validation", () => {
         maxOutOfSquareMm: 5,
         maxWidthRangeMm: 4,
         maxHeightRangeMm: 4,
+        warnBandMultiplier: 1.5,
       },
     });
 
@@ -64,6 +65,7 @@ describe("capture session validation", () => {
         maxOutOfSquareMm: 5,
         maxWidthRangeMm: 4,
         maxHeightRangeMm: 4,
+        warnBandMultiplier: 1.5,
       },
     });
 
